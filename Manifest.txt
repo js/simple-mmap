@@ -1,7 +1,12 @@
+.gitignore
 History.txt
 Manifest.txt
 README.txt
 Rakefile
-bin/simple_mmap
+ext/extconf.rb
+ext/mapped_file.c
 lib/simple_mmap.rb
-test/test_simple_mmap.rb
+lib/simple_mmap/file_window.rb
+lib/simple_mmap/version.rb
+test/test_file_window.rb
+test/test_mapped_file.rb

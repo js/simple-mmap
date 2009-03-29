@@ -1,6 +1,6 @@
 = simple_mmap
 
-* FIX (url)
+http://simple-mmap.rubyforge.org/
 
 == DESCRIPTION:
 
@@ -8,7 +8,8 @@
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* mmap a file. Read data from it. Close it when you're done. More fun than the "ball in a cup" game.
+* it ONLY supports reading mmap'ed files, not writing to the mmap'ed region
 
 == SYNOPSIS:
   
@@ -17,13 +18,14 @@
 # works with the same semantics as Array#[] (eg. fw[10..14] and fw[10...14])
 >> fw.close # you MUST close the FileWindow after you're done (HAHA no blocks for you yet!)
 
+
 == REQUIREMENTS:
 
 * A mmap() capable platform.
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+gem install simple-mmap
 
 == LICENSE:
 
