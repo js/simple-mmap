@@ -1,0 +1,10 @@
+/ext/*.o
+/ext/*.bundle
+/ext/*.so
+/ext/*.dll
+/ext/mkmf.log
+/lib/simple_mmap/*.bundle
+/lib/simple_mmap/*.so
+/lib/simple_mmap/*.dll
+/ext/Makefile
+/pkg

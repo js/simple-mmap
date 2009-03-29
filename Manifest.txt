@@ -1,0 +1,7 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/simple_mmap
+lib/simple_mmap.rb
+test/test_simple_mmap.rb
