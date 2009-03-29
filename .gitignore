@@ -8,3 +8,4 @@
 /lib/simple_mmap/*.dll
 /ext/Makefile
 /pkg
+/doc/*
