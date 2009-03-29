@@ -39,6 +39,12 @@ static VALUE mod_simple_mmap;
 static VALUE sm_mapped_file;
 static VALUE sm_map_data;
 
+/*
+ * Document-method: new
+ * call-seq: SimpleMMap::MappedFile.new(path)
+ *
+ * mmap() the file at +path+
+ */
 static VALUE sm_mapped_file_initialize(VALUE vself, VALUE filename)
 {
   int fd = -1;
@@ -79,6 +85,12 @@ static VALUE sm_mapped_file_initialize(VALUE vself, VALUE filename)
   return Qnil;
 }
 
+/*
+ * Document-method: close
+ * call-seq: obj.close
+ *
+ * munmap() the current mmapped file
+ */
 static VALUE sm_mapped_file_close(VALUE vself)
 {
   VALUE vsm_map;
@@ -96,6 +108,12 @@ static VALUE sm_mapped_file_close(VALUE vself)
   return Qtrue;
 }
 
+/*
+ * Document-method: close
+ * call-seq: obj.read_window_data(offset, length)
+ *
+ * Read +length+ bytes starting at +offset+
+ */
 static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE vlength) 
 {
   size_t offset = NUM2INT(voffset);
