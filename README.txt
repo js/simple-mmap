@@ -25,7 +25,9 @@ http://simple-mmap.rubyforge.org/
 
 == INSTALL:
 
-gem install simple-mmap
+$ gem install simple_mmap
+# If you have ruby 1.9+ built with executables having a program-suffix:
+$ env rake=rake1.9 gem install simple_mmap
 
 == LICENSE:
 
