@@ -87,9 +87,13 @@ static VALUE sm_mapped_file_close(VALUE vself)
   sm_map = ALLOC(simple_mmap_map);
   vsm_map = rb_ivar_get(vself, rb_intern("@mmap_data"));
   Data_Get_Struct(vsm_map, simple_mmap_map, sm_map);
-  // TODO: check that the mmap+fd is active first
-  munmap(sm_map->map, sm_map->len);
-  close(sm_map->fd);
+  
+  if (sm_map->map != (caddr_t) -1)
+    munmap(sm_map->map, sm_map->len);
+  if (sm_map->fd != -1)
+    close(sm_map->fd);
+  
+  return Qtrue;
 }
 
 static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE vlength) 
