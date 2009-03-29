@@ -37,6 +37,7 @@ module SimpleMmap
       @mmap.close
       @mmap = nil
     end
+    alias_method :unmap, :close
   
     # The current offset
     def offset
