@@ -9,7 +9,7 @@ Hoe.new('simple_mmap', SimpleMmap::VERSION) do |p|
   p.rubyforge_name = 'simple-mmap'
   p.developer('Johan Sørensen', 'johan@johansorensen.com')
   p.spec_extras = {
-    "extensions" => ["ext/extconf.rb"]
+    "extensions" => ["Rakefile"]
   }
 end
 
