@@ -122,7 +122,6 @@ static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE v
   VALUE vsm_map;
   simple_mmap_map *sm_map;
   
-  sm_map = ALLOC(simple_mmap_map);
   vsm_map = rb_ivar_get(vself, rb_intern("@mmap_data"));
   Data_Get_Struct(vsm_map, simple_mmap_map, sm_map);
   
@@ -158,7 +157,6 @@ static VALUE sm_mapped_file_size(VALUE vself)
   VALUE vsm_map;
   simple_mmap_map *sm_map;
 
-  sm_map = ALLOC(simple_mmap_map);
   vsm_map = rb_ivar_get(vself, rb_intern("@mmap_data"));
   Data_Get_Struct(vsm_map, simple_mmap_map, sm_map);
   return UINT2NUM(sm_map->len);
