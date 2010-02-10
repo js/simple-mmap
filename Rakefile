@@ -1,38 +1,50 @@
-# encoding: utf-8
-
 require 'rubygems'
-require 'hoe'
-require './lib/simple_mmap/version.rb'
-require "rake/clean"
+require 'rake'
 
-Hoe.new('simple_mmap', SimpleMmap::VERSION) do |p|
-  p.rubyforge_name = 'simple-mmap'
-  p.developer('Johan Sørensen', 'johan@johansorensen.com')
-  p.spec_extras = {
-    "extensions" => ["Rakefile"]
-  }
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    gem.name = "simple-mmap"
+    gem.email = "pcnoordhuis@gmail.com"
+    gem.homepage = "http://github.com/pietern/simple-mmap"
+    gem.authors = ["Johan Sørensen", "Pieter Noordhuis"]
+
+    gem.extensions = ["ext/extconf.rb"]
+    gem.files = FileList['ext/Makefile', 'ext/*.{c,rb}', 'lib/**/*.rb', 'test/**/*.rb']
+    gem.require_paths = ["ext", "lib"]
+  end
+  Jeweler::GemcutterTasks.new
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
 DLEXT = Config::CONFIG['DLEXT']
-
 file 'ext/Makefile' => FileList['ext/{*.c,*.h,*.rb}'] do
   chdir('ext') { ruby 'extconf.rb' }
 end
-CLEAN.include 'ext/Makefile', 'ext/mkmf.log'
 
 file "ext/mapped_file.#{DLEXT}" => FileList['ext/Makefile', 'ext/*.{c,h,rb}'] do |f|
   sh 'cd ext && make'
 end
-CLEAN.include 'ext/*.{o,bundle,so,dll}'
 
-file "lib/simple_mmap/mapped_file.#{DLEXT}" => "ext/mapped_file.#{DLEXT}" do |f|
-  cp f.prerequisites, "lib/simple_mmap/", :preserve => true
+namespace :ext do
+  task :clean do
+    %W[
+      ext/Makefile
+      ext/mapped_file.#{DLEXT}
+    ].each do |file|
+      sh "rm -f #{file}"
+    end
+  end
+
+  desc 'Build the mapped_file extension'
+  task :build => [:clean, "ext/mapped_file.#{DLEXT}"]
 end
-#CLEAN.include "lib/simple_mmap/mapped_file.#{DLEXT}"
 
-desc 'Build the mapped_file extension'
-task :build => "lib/simple_mmap/mapped_file.#{DLEXT}"
-
-task :test => [:build]
+require 'rake/testtask'
+Rake::TestTask.new(:test => "ext:build") do |test|
+  test.libs << 'ext'
+  test.verbose = true
+end
 
 task :default => :test
