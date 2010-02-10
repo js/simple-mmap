@@ -147,6 +147,24 @@ static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE v
   return rb_str_new(buff, length);
 }
 
+/*
+ * Document-method: size
+ * call-seq: obj.size
+ *
+ * Return size of mapped file
+ */
+
+static VALUE sm_mapped_file_size(VALUE vself)
+{
+  VALUE vsm_map;
+  simple_mmap_map *sm_map;
+
+  sm_map = ALLOC(simple_mmap_map);
+  vsm_map = rb_ivar_get(vself, rb_intern("@mmap_data"));
+  Data_Get_Struct(vsm_map, simple_mmap_map, sm_map);
+  return UINT2NUM(sm_map->len);
+}
+
 void Init_mapped_file()
 {
   mod_simple_mmap = rb_define_module("SimpleMmap");
@@ -155,6 +173,7 @@ void Init_mapped_file()
   rb_define_private_method(sm_mapped_file, "initialize", sm_mapped_file_initialize, 1);
   rb_define_method(sm_mapped_file, "close", sm_mapped_file_close, 0);
   rb_define_method(sm_mapped_file, "read_window_data", sm_mapped_file_read_window_data, 2);
+  rb_define_method(sm_mapped_file, "size", sm_mapped_file_size, 0);
   
   sm_map_data = rb_define_class_under(sm_mapped_file, "MmapData", rb_cObject);
 }

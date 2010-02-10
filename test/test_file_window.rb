@@ -68,4 +68,8 @@ class TestFileWindow < Test::Unit::TestCase
     assert_equal "abc", @fw.read(3)
     assert_equal 3, @fw.offset
   end
+
+  def test_size
+    assert_equal 26, @fw.size
+  end
 end

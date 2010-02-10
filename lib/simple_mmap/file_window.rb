@@ -92,5 +92,10 @@ module SimpleMmap
       @offset += length
       data
     end
+
+    # Return size of mapped file
+    def size
+      @mmap.size
+    end
   end
 end
