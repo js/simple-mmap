@@ -130,12 +130,11 @@ static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE v
     return Qnil;
   }
   
-  size_t curr;
-  curr = offset;
+  size_t curr = offset;
   size_t i;
   for(i = 0; i < length; ++i) {
     //printf("i=%i offset=%i length=%i curr=%i map->len=%i\n", i, offset, length, curr, sm_map->len);
-    if ((curr + i) > sm_map->len)
+    if ((offset + i) > sm_map->len)
       break;
     buff[i] = sm_map->map[curr++];
   }

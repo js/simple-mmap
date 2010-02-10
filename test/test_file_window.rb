@@ -43,6 +43,10 @@ class TestFileWindow < Test::Unit::TestCase
     assert_equal "z", @fw[25, 10]
   end
 
+  def test_get_all_bytes
+    assert_equal ('a'..'z').to_a.join, @fw[0, 26]
+  end
+
   def test_nil_on_negative_index
     assert_equal nil, @fw[-1]
     assert_equal nil, @fw[-1, 2]
