@@ -7,6 +7,7 @@ begin
     gem.name = "simple-mmap"
     gem.email = "pcnoordhuis@gmail.com"
     gem.homepage = "http://github.com/pietern/simple-mmap"
+    gem.summary = "Read-only wrapper for mmap"
     gem.authors = ["Johan Sørensen", "Pieter Noordhuis"]
 
     gem.extensions = ["ext/extconf.rb"]
