@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + "/../lib/simple_mmap"
 class TestFileWindow < Test::Unit::TestCase
   def setup
     @file = Tempfile.new("TestFileWindow.data")
-    File.open(@file.path, "w"){|f| f.puts(('a'..'z').to_a.join) }
+    File.open(@file.path, "w"){|f| f.write(('a'..'z').to_a.join) }
     @fw = SimpleMmap::FileWindow.new(@file.path)
   end
   
@@ -39,6 +39,15 @@ class TestFileWindow < Test::Unit::TestCase
     assert_equal 1, @fw.offset
   end
   
+  def test_get_bytes_past_length
+    assert_equal "z", @fw[25, 10]
+  end
+
+  def test_nil_on_negative_index
+    assert_equal nil, @fw[-1]
+    assert_equal nil, @fw[-1, 2]
+  end
+
   def test_get_from_x_to_y_with_index_comma_notation
     assert_equal "cde", @fw[2, 3]
     assert_equal 5, @fw.pos

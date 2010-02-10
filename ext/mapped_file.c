@@ -109,7 +109,7 @@ static VALUE sm_mapped_file_close(VALUE vself)
 }
 
 /*
- * Document-method: close
+ * Document-method: read_window_data
  * call-seq: obj.read_window_data(offset, length)
  *
  * Read +length+ bytes starting at +offset+
@@ -140,8 +140,9 @@ static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE v
     buff[i] = sm_map->map[curr++];
   }
   
+  // If the range overflows, return part that overlaps
   if ((offset + length) > sm_map->len)
-    return rb_str_new(buff, ((offset+length) - sm_map->len)-1);
+    return rb_str_new(buff, sm_map->len - offset);
       
   return rb_str_new(buff, length);
 }
