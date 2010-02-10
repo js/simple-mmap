@@ -10,7 +10,7 @@ begin
     gem.summary = "A simplistic interface for reading memory mapped files"
     gem.authors = ["Johan Sørensen", "Pieter Noordhuis"]
 
-    gem.extensions = ["ext/**/extconf.rb"]
+    gem.extensions = FileList["ext/**/extconf.rb"]
     gem.files = FileList['Rakefile', 'ext/**/*.{c,rb}', 'lib/**/*.rb', 'test/**/*.rb']
     gem.require_paths = ["ext", "lib"]
 
