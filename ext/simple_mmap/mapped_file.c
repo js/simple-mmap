@@ -118,31 +118,22 @@ static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE v
 {
   size_t offset = NUM2INT(voffset);
   size_t length = NUM2INT(vlength);
-  char buff[length];
   VALUE vsm_map;
   simple_mmap_map *sm_map;
   
   vsm_map = rb_ivar_get(vself, rb_intern("@mmap_data"));
   Data_Get_Struct(vsm_map, simple_mmap_map, sm_map);
   
-  if (offset > sm_map->len) {
+  if (offset < 0 || offset > sm_map->len) {
     return Qnil;
   }
-  
-  size_t curr = offset;
-  size_t i;
-  for(i = 0; i < length; ++i) {
-    //printf("i=%i offset=%i length=%i curr=%i map->len=%i\n", i, offset, length, curr, sm_map->len);
-    if ((offset + i) > sm_map->len)
-      break;
-    buff[i] = sm_map->map[curr++];
-  }
-  
+
   // If the range overflows, return part that overlaps
-  if ((offset + length) > sm_map->len)
-    return rb_str_new(buff, sm_map->len - offset);
-      
-  return rb_str_new(buff, length);
+  if ((offset + length) > sm_map->len) {
+    length = sm_map->len - offset;
+  }
+
+  return rb_str_new(sm_map->map + offset, length);
 }
 
 /*
