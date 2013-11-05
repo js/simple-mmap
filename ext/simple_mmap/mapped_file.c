@@ -28,6 +28,24 @@
 #include <unistd.h>
 #include "ruby.h"
 
+#ifndef NUM2SIZET
+#  include <limits.h>
+#  include <stdint.h>
+#  if SIZE_MAX > ULONG_MAX
+#    define NUM2SIZET NUM2ULL
+#    define SIZET2NUM ULONG2NUM
+#  elif SIZE_MAX > UINT_MAX
+#    define NUM2SIZET NUM2ULONG
+#    define SIZET2NUM ULONG2NUM
+#  elif SIZE_MAX > USHRT_MAX
+#    define NUM2SIZET NUM2UINT
+#    define SIZET2NUM UINT2NUM
+#  else
+#    define NUM2SIZET NUM2USHORT
+#    define SIZET2NUM USHORT2NUM
+#  endif
+#endif
+
 // a memory mapped file
 typedef struct {  
 	int fd;
@@ -116,17 +134,19 @@ static VALUE sm_mapped_file_close(VALUE vself)
  */
 static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE vlength) 
 {
-  size_t offset = NUM2INT(voffset);
-  size_t length = NUM2INT(vlength);
+  size_t offset, length;
   VALUE vsm_map;
   simple_mmap_map *sm_map;
   
+  if (NUM2LL(voffset) < 0) return Qnil;
+  if (NUM2LL(vlength) < 0) rb_raise(rb_eRangeError, "length out of range: %lld", NUM2LL(vlength));
+  offset = NUM2SIZET(voffset);
+  length = NUM2SIZET(vlength);
+
   vsm_map = rb_ivar_get(vself, rb_intern("@mmap_data"));
   Data_Get_Struct(vsm_map, simple_mmap_map, sm_map);
   
-  if (offset < 0 || offset > sm_map->len) {
-    return Qnil;
-  }
+  if (offset > sm_map->len) return Qnil;
 
   // If the range overflows, return part that overlaps
   if ((offset + length) > sm_map->len) {
