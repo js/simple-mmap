@@ -1,7 +1,4 @@
-# A sample Gemfile
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-group :test do
-  gem 'jeweler'
-  gem 'rake-compiler'
-end
+# Specify your gem's dependencies in simple_mmap.gemspec
+gemspec

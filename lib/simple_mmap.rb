@@ -20,5 +20,6 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 $:.unshift File.dirname(__FILE__)
+require "simple_mmap/version"
 require "simple_mmap/mapped_file"
 require "simple_mmap/file_window"
