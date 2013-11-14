@@ -188,7 +188,7 @@ static VALUE sm_mapped_file_size(VALUE vself)
 
   vsm_map = rb_ivar_get(vself, rb_intern("@mmap_data"));
   Data_Get_Struct(vsm_map, simple_mmap_map, sm_map);
-  return UINT2NUM(sm_map->len);
+  return SIZET2NUM(sm_map->read_len);
 }
 
 void Init_mapped_file()
