@@ -70,11 +70,11 @@ module SimpleMmap
         offset = index
         length = 0
       when Range
-        offset = index.begin
-        length = index.end - index.begin
-        unless index.exclude_end?
-          length += 1
-        end
+        offset = index.begin < 0 ? index.begin + @mmap.size : index.begin
+        return nil if offset < 0 or offset > @mmap.size
+        length = (index.end < 0 ? index.end + @mmap.size : index.end) - offset
+        length += 1 unless index.exclude_end?
+        return '' if length <= 0
       end
       
       @offset = offset + length
