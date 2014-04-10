@@ -116,8 +116,8 @@ static VALUE sm_mapped_file_close(VALUE vself)
  */
 static VALUE sm_mapped_file_read_window_data(VALUE vself, VALUE voffset, VALUE vlength) 
 {
-  size_t offset = NUM2INT(voffset);
-  size_t length = NUM2INT(vlength);
+  size_t offset = NUM2LONG(voffset);
+  size_t length = NUM2LONG(vlength);
   char buff[length];
   VALUE vsm_map;
   simple_mmap_map *sm_map;
