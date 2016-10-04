@@ -1,38 +1,15 @@
-# encoding: utf-8
+require "bundler/gem_tasks"
 
-require 'rubygems'
-require 'hoe'
-require './lib/simple_mmap/version.rb'
-require "rake/clean"
-
-Hoe.new('simple_mmap', SimpleMmap::VERSION) do |p|
-  p.rubyforge_name = 'simple-mmap'
-  p.developer('Johan Sørensen', 'johan@johansorensen.com')
-  p.spec_extras = {
-    "extensions" => ["Rakefile"]
-  }
+require 'rake/extensiontask'
+Rake::ExtensionTask.new('simple_mmap') do |ext|
+  ext.name = "mapped_file"
+  ext.lib_dir = File.join('lib', 'simple_mmap')
 end
 
-DLEXT = Config::CONFIG['DLEXT']
-
-file 'ext/Makefile' => FileList['ext/{*.c,*.h,*.rb}'] do
-  chdir('ext') { ruby 'extconf.rb' }
+require 'rake/testtask'
+Rake::TestTask.new(:test => :compile) do |test|
+  test.libs << 'ext'
+  test.verbose = true
 end
-CLEAN.include 'ext/Makefile', 'ext/mkmf.log'
-
-file "ext/mapped_file.#{DLEXT}" => FileList['ext/Makefile', 'ext/*.{c,h,rb}'] do |f|
-  sh 'cd ext && make'
-end
-CLEAN.include 'ext/*.{o,bundle,so,dll}'
-
-file "lib/simple_mmap/mapped_file.#{DLEXT}" => "ext/mapped_file.#{DLEXT}" do |f|
-  cp f.prerequisites, "lib/simple_mmap/", :preserve => true
-end
-#CLEAN.include "lib/simple_mmap/mapped_file.#{DLEXT}"
-
-desc 'Build the mapped_file extension'
-task :build => "lib/simple_mmap/mapped_file.#{DLEXT}"
-
-task :test => [:build]
 
 task :default => :test

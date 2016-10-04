@@ -25,10 +25,10 @@ module SimpleMmap
   class FileWindow
     # Create a mmap'ed window for file at +path+
     # You are responsible for closing it when you're done using #close
-    def initialize(path)
+    def initialize(path, offset = nil, length = nil)
       @path = path
       @offset = 0
-      @mmap = SimpleMmap::MappedFile.new(@path)
+      @mmap = SimpleMmap::MappedFile.new(@path, offset, length)
     end
     attr_reader :path, :offset
     
@@ -70,11 +70,11 @@ module SimpleMmap
         offset = index
         length = 0
       when Range
-        offset = index.begin
-        length = index.end - index.begin
-        unless index.exclude_end?
-          length += 1
-        end
+        offset = index.begin < 0 ? index.begin + @mmap.size : index.begin
+        return nil if offset < 0 or offset > @mmap.size
+        length = (index.end < 0 ? index.end + @mmap.size : index.end) - offset
+        length += 1 unless index.exclude_end?
+        return '' if length <= 0
       end
       
       @offset = offset + length
@@ -91,6 +91,11 @@ module SimpleMmap
       data = @mmap.read_window_data(@offset, length)
       @offset += length
       data
+    end
+
+    # Return size of mapped file
+    def size
+      @mmap.size
     end
   end
 end
