@@ -48,9 +48,9 @@
 
 // a memory mapped file
 typedef struct {  
-	int fd;
+  int fd;
   caddr_t map;
-	size_t len;
+  size_t len;
   caddr_t read_base;
   size_t read_len;
 } simple_mmap_map;
